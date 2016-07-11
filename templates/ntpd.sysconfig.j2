@@ -1,0 +1,6 @@
+# Command line options for ntpd
+{% if ntp_sysconfig_options is defined %}
+OPTIONS="{{ ntp_sysconfig_options }}"
+{% else %}
+OPTIONS="-g"
+{% endif %}

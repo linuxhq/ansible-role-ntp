@@ -1,0 +1,25 @@
+---
+- name: Install ntp package
+  tags: ntp
+  yum: name=ntp
+       state=present
+       update_cache=yes
+  register: ntp_yum
+
+- block:
+    - name: Configure ntpd
+      template: src={{ item.src }}
+                dest={{ item.dst }}
+                owner=root
+                group=root
+                mode=0644
+      notify: restart ntpd
+      with_items:
+        - { src: ntp.conf.j2, dst: /etc/ntp.conf }
+        - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
+    - name: Enable and start the ntpd service
+      service: name=ntpd
+               enabled=yes
+               state=started
+  tags: ntp
+  when: ntp_yum|success

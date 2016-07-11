@@ -1,0 +1,14 @@
+---
+ntp_crypto: False
+ntp_disable:
+  - monitor
+ntp_driftfile: /var/lib/ntp/drift
+ntp_includefile: /etc/ntp/crypto/pw
+ntp_keys: /etc/ntp/keys
+ntp_restrict: [ '127.0.0.1', '::1' ]
+ntp_server:
+  - 0.centos.pool.ntp.org
+  - 1.centos.pool.ntp.org
+  - 2.centos.pool.ntp.org
+  - 3.centos.pool.ntp.org
+ntp_sysconfig_options: '-g'
