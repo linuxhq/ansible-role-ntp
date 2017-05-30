@@ -1,5 +1,7 @@
 ---
 - name: restart ntpd
   tags: ntp
-  service: name=ntpd
-           state=restarted
+  service:
+    name: ntpd
+    state: restarted
+...

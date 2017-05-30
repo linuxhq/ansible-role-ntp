@@ -1,24 +1,15 @@
 # For more information about this file, see the man pages
 # ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
 
-{% if ntp_driftfile is defined %}
-driftfile {{ ntp_driftfile }}
-{% else %}
-driftfile /var/lib/ntp/drift
-{% endif %}
+driftfile {{ ntp_driftfile if ntp_driftfile is defined else '/var/lib/ntp/drift' }}
 
 # Permit time synchronization with our time source, but do not
 # permit the source to query or modify the service on this system.
-restrict default nomodify notrap nopeer noquery
-
-# Permit all access over the loopback interface.  This could
-# be tightened as well, but to do so would effect some of
-# the administrative functions.
-restrict 127.0.0.1 
-restrict ::1
-
-# Hosts on local network are less restricted.
-#restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+{% if ntp_restrict is defined %}
+{%   for restrict in ntp_restrict %}
+restrict {{ restrict }}
+{%   endfor %}
+{% endif %}
 
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
@@ -26,11 +17,6 @@ restrict ::1
 {%   for server in ntp_server %}
 server {{ server }} iburst
 {%   endfor %}
-{% else %}
-server 0.centos.pool.ntp.org iburst
-server 1.centos.pool.ntp.org iburst
-server 2.centos.pool.ntp.org iburst
-server 3.centos.pool.ntp.org iburst
 {% endif %}
 
 #broadcast 192.168.1.255 autokey	# broadcast server
@@ -41,29 +27,13 @@ server 3.centos.pool.ntp.org iburst
 #manycastclient 239.255.254.254 autokey # manycast client
 
 # Enable public key cryptography.
-{% if ntp_crypto is defined %}
-{%   if ntp_crypto %}
-crypto
-{%   else %}
-#crypto
-{%   endif %}
-{% else %}
-#crypto
-{% endif %}
+{{ '' if ntp_crypto is defined and ntp_crypto else '#' }}crypto 
 
-{% if ntp_includefile is defined %}
-includefile {{ ntp_includefile }}
-{% else %}
-includefile /etc/ntp/crypto/pw
-{% endif %}
+includefile {{ ntp_includefile if ntp_includefile is defined else '/etc/ntp/crypto/pw' }}
 
 # Key file containing the keys and key identifiers used when operating
 # with symmetric key cryptography. 
-{% if ntp_keys is defined %}
-keys {{ ntp_keys }}
-{% else %}
-keys /etc/ntp/keys
-{% endif %}
+keys {{ ntp_keys if ntp_keys is defined else '/etc/ntp/keys' }}
 
 # Specify the key identifiers which are trusted.
 {% if ntp_trustedkey is defined %}
@@ -87,18 +57,10 @@ controlkey {{ ntp_controlkey }}
 {% endif %}
 
 # Enable writing of statistics records.
-{% if ntp_statistics is defined %}
-statistics {{ ntp_statistics|join(' ') }}
-{% else %}
-#statistics clockstats cryptostats loopstats peerstats
-{% endif %}
+statistics {{ ntp_statistics|join(' ') if ntp_statistics is defined else 'clockstats' }}
 
 # Disable the monitoring facility to prevent amplification attacks using ntpdc
 # monlist command when default restrict does not include the noquery flag. See
 # CVE-2013-5211 for more details.
 # Note: Monitoring will not be disabled with the limited restriction flag.
-{% if ntp_disable is defined %}
-disable {{ ntp_disable|join(' ') }}
-{% else %}
-disable monitor
-{% endif %}
+disable {{ ntp_disable|join(' ') if ntp_disable is defined else 'monitor' }}
