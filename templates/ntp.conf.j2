@@ -1,66 +1,13 @@
-# For more information about this file, see the man pages
-# ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
+# {{ ansible_managed }}
 
-driftfile {{ ntp_driftfile if ntp_driftfile is defined else '/var/lib/ntp/drift' }}
-
-# Permit time synchronization with our time source, but do not
-# permit the source to query or modify the service on this system.
-{% if ntp_restrict is defined %}
-{%   for restrict in ntp_restrict %}
-restrict {{ restrict }}
-{%   endfor %}
-{% endif %}
-
-# Use public servers from the pool.ntp.org project.
-# Please consider joining the pool (http://www.pool.ntp.org/join.html).
-{% if ntp_server is defined %}
-{%   for server in ntp_server %}
-server {{ server }} iburst
-{%   endfor %}
-{% endif %}
-
-#broadcast 192.168.1.255 autokey	# broadcast server
-#broadcastclient			# broadcast client
-#broadcast 224.0.1.1 autokey		# multicast server
-#multicastclient 224.0.1.1		# multicast client
-#manycastserver 239.255.254.254		# manycast server
-#manycastclient 239.255.254.254 autokey # manycast client
-
-# Enable public key cryptography.
-{{ '' if ntp_crypto is defined and ntp_crypto else '#' }}crypto 
-
-includefile {{ ntp_includefile if ntp_includefile is defined else '/etc/ntp/crypto/pw' }}
-
-# Key file containing the keys and key identifiers used when operating
-# with symmetric key cryptography. 
-keys {{ ntp_keys if ntp_keys is defined else '/etc/ntp/keys' }}
-
-# Specify the key identifiers which are trusted.
-{% if ntp_trustedkey is defined %}
-trustedkey {{ ntp_trustedkey|join(' ') }}
-{% else %}
-#trustedkey 4 8 42
-{% endif %}
-
-# Specify the key identifier to use with the ntpdc utility.
-{% if ntp_requestkey is defined %}
-requestkey {{ ntp_requestkey }}
-{% else %}
-#requestkey 8
-{% endif %}
-
-# Specify the key identifier to use with the ntpq utility.
-{% if ntp_controlkey is defined %}
-controlkey {{ ntp_controlkey }}
-{% else %}
-#controlkey 8
-{% endif %}
-
-# Enable writing of statistics records.
-statistics {{ ntp_statistics|join(' ') if ntp_statistics is defined else 'clockstats' }}
-
-# Disable the monitoring facility to prevent amplification attacks using ntpdc
-# monlist command when default restrict does not include the noquery flag. See
-# CVE-2013-5211 for more details.
-# Note: Monitoring will not be disabled with the limited restriction flag.
-disable {{ ntp_disable|join(' ') if ntp_disable is defined else 'monitor' }}
+{% for command, value in ntp_commands.iteritems()|sort %}
+{%   if value is sameas true %}
+{{ command }}
+{%   elif value is string or value is number %}
+{{ command }} {{ value }}
+{%   else %}
+{%     for v in value %}
+{{ command }} {{ v }}
+{%     endfor %}
+{%   endif %}
+{% endfor %}

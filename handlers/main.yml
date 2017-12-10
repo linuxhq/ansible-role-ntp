@@ -1,6 +1,7 @@
 ---
 - name: restart ntpd
   tags: ntp
+  become: true
   service:
     name: ntpd
     state: restarted

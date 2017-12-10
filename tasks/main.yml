@@ -1,10 +1,10 @@
 ---
 - name: Ensure that the ntp package is installed
   tags: ntp
+  become: true
   yum:
     name: ntp
     state: present
-    update_cache: yes
   register: ntp_yum
 
 - block:
@@ -20,11 +20,12 @@
         - { src: ntp.conf.j2, dst: /etc/ntp.conf }
         - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
 
-    - name: Enable and start the ntpd service
+    - name: Enable and start the ntpd service on boot
       service:
         enabled: yes
         name: ntpd
         state: started
   tags: ntp
+  become: true
   when: ntp_yum|success
 ...
