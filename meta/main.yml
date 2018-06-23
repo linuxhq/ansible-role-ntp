@@ -4,14 +4,11 @@ galaxy_info:
   author: tkimball83
   description: RHEL/CentOS - Network Time Protocol daemon (ntpd)
   license: GPLv3
-  min_ansible_version: 2.4
+  min_ansible_version: 2.5
   platforms:
     - name: EL
       versions:
-        - 6
-        - 7
+        - all
   galaxy_tags:
     - ntp
-    - time
-    - system
 ...

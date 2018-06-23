@@ -7,25 +7,27 @@
     state: present
   register: ntp_yum
 
-- block:
-    - name: Applying ntpd configurations
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dst }}"
-        owner: root
-        group: root
-        mode: 0644
-      notify: restart ntpd
-      with_items:
-        - { src: ntp.conf.j2, dst: /etc/ntp.conf }
-        - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
-
-    - name: Enable and start the ntpd service on boot
-      service:
-        enabled: yes
-        name: ntpd
-        state: started
+- name: Attempting to overlay ntp configurations
   tags: ntp
   become: true
-  when: ntp_yum|success
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ntpd
+  with_items:
+    - { src: ntp.conf.j2, dst: /etc/ntp.conf }
+    - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
+  when: ntp_yum is success
+
+- name: Ensure that ntpd is started and enabled on boot
+  tags: ntp
+  become: true
+  service:
+    enabled: yes
+    name: ntpd
+    state: started
+  when: ntp_yum is success
 ...
