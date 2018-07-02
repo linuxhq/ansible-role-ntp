@@ -1,6 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
+  role_name: ntp
   author: tkimball83
   description: RHEL/CentOS - Network Time Protocol daemon (ntpd)
   license: GPLv3
