@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-{% for command, value in ntp_commands.iteritems()|sort %}
+{% for command, value in ntp_commands.items()|sort %}
 {%   if value is sameas true %}
 {{ command }}
 {%   elif value is string or value is number %}
