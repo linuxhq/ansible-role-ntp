@@ -6,7 +6,7 @@
 - name: Ensure that the ntp package is installed
   tags: ntp
   become: true
-  yum:
+  package:
     name: "{{ ntp_package_name }}"
     state: present
 
