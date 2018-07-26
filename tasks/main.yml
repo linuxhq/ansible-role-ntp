@@ -5,7 +5,6 @@
   yum:
     name: ntp
     state: present
-  register: ntp_yum
 
 - name: Attempting to overlay ntp configurations
   tags: ntp
@@ -20,7 +19,6 @@
   with_items:
     - { src: ntp.conf.j2, dst: /etc/ntp.conf }
     - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
-  when: ntp_yum is success
 
 - name: Ensure that ntpd is started and enabled on boot
   tags: ntp
@@ -29,5 +27,4 @@
     enabled: yes
     name: ntpd
     state: started
-  when: ntp_yum is success
 ...
