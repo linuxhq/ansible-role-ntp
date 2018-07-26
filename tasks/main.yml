@@ -1,30 +1,32 @@
 ---
+- name: Include operating system specific variables
+  include_vars:
+    file: "{{ ansible_os_family }}.yml"
+
 - name: Ensure that the ntp package is installed
   tags: ntp
   become: true
   yum:
-    name: ntp
+    name: "{{ ntp_package_name }}"
     state: present
 
 - name: Attempting to overlay ntp configurations
   tags: ntp
   become: true
   template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dst }}"
+    src: "{{ item.template }}"
+    dest: "{{ item.path }}"
     owner: root
     group: root
     mode: 0644
   notify: restart ntpd
-  with_items:
-    - { src: ntp.conf.j2, dst: /etc/ntp.conf }
-    - { src: ntpd.sysconfig.j2, dst: /etc/sysconfig/ntpd }
+  with_items: "{{ ntp_configs }}"
 
 - name: Ensure that ntpd is started and enabled on boot
   tags: ntp
   become: true
   service:
     enabled: yes
-    name: ntpd
+    name: "{{ ntp_service_name }}"
     state: started
 ...
