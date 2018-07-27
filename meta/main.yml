@@ -3,7 +3,7 @@ dependencies: []
 galaxy_info:
   role_name: ntp
   author: tkimball83
-  description: Network Time Protocol daemon (ntpd)
+  description: Linux - Network Time Protocol daemon (ntpd)
   license: GPLv3
   min_ansible_version: 2.5
   platforms:
@@ -11,10 +11,10 @@ galaxy_info:
       versions:
         - all
     - name: Debian
-      version:
+      versions:
         - all
     - name: Ubuntu
-      version:
+      versions:
         - all
   galaxy_tags:
     - ntp

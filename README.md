@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/linuxhq/ansible-role-ntp.svg?branch=master)](https://travis-ci.org/linuxhq/ansible-role-ntp)
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-ntp-blue.svg?style=flat)](https://galaxy.ansible.com/linuxhq/ntp)
-[![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat)](COPYING)
+[![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat)](https://github.com/linuxhq/ansible-role-ntp/blob/master/COPYING)
 
-Network Time Protocol daemon (ntpd)
+Linux - Network Time Protocol daemon (ntpd)
 
 ## Requirements
 
@@ -24,10 +24,10 @@ Available variables are listed below, along with default values:
         - 127.0.0.1
         - ::1
       server:
-        - 0.centos.pool.ntp.org iburst
-        - 1.centos.pool.ntp.org iburst
-        - 2.centos.pool.ntp.org iburst
-        - 3.centos.pool.ntp.org iburst
+        - 0.pool.ntp.org iburst
+        - 1.pool.ntp.org iburst
+        - 2.pool.ntp.org iburst
+        - 3.pool.ntp.org iburst
     ntp_sysconfig: '-g'
 
 ## Dependencies

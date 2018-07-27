@@ -6,3 +6,4 @@ ntp_configs:
   - template: ntp.default.j2
     path: /etc/default/ntp
 ntp_service_name: ntp
+...

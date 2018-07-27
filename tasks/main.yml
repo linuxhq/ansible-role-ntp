@@ -1,5 +1,6 @@
 ---
 - name: Include operating system specific variables
+  tags: ntp
   include_vars:
     file: "{{ ansible_os_family }}.yml"
 

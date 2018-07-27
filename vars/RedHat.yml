@@ -6,3 +6,4 @@ ntp_configs:
   - template: ntpd.sysconfig.j2
     path: /etc/sysconfig/ntpd
 ntp_service_name: ntpd
+...
