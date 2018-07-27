@@ -4,7 +4,7 @@
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-ntp-blue.svg?style=flat)](https://galaxy.ansible.com/linuxhq/ntp)
 [![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat)](COPYING)
 
-RHEL/CentOS - Network Time Protocol daemon (ntpd)
+Network Time Protocol daemon (ntpd)
 
 ## Requirements
 
