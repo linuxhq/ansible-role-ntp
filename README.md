@@ -14,6 +14,12 @@ None
 
 Available variables are listed below, along with default values:
 
+    ntp_server_options: iburst
+    ntp_servers:
+      - "0.pool.ntp.org {{ ntp_server_options }}"
+      - "1.pool.ntp.org {{ ntp_server_options }}"
+      - "2.pool.ntp.org {{ ntp_server_options }}"
+      - "3.pool.ntp.org {{ ntp_server_options }}"
     ntp_commands:
       disable: monitor
       driftfile: /var/lib/ntp/drift
@@ -23,11 +29,7 @@ Available variables are listed below, along with default values:
         - default nomodify notrap nopeer noquery
         - 127.0.0.1
         - ::1
-      server:
-        - 0.pool.ntp.org iburst
-        - 1.pool.ntp.org iburst
-        - 2.pool.ntp.org iburst
-        - 3.pool.ntp.org iburst
+      server: "{{ ntp_servers }}"
     ntp_sysconfig: '-g'
 
 ## Dependencies
