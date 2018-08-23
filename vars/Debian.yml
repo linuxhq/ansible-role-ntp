@@ -1,9 +1,0 @@
----
-ntp_package_name: ntp
-ntp_configs:
-  - template: ntp.conf.j2
-    path: /etc/ntp.conf
-  - template: ntp.default.j2
-    path: /etc/default/ntp
-ntp_service_name: ntp
-...

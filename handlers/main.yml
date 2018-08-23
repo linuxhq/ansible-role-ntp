@@ -3,6 +3,6 @@
   tags: ntp
   become: true
   service:
-    name: "{{ ntp_service_name }}"
+    name: "{{ ntp_service }}"
     state: restarted
 ...

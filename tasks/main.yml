@@ -1,33 +1,48 @@
 ---
-- name: Include operating system specific variables
+- name: Attempting to set os family specific facts (Debian)
   tags: ntp
-  include_vars:
-    file: "{{ ansible_os_family }}.yml"
+  set_fact:
+    ntp_envfile: /etc/default/ntp
+    ntp_envname: ntpd_opts
+    ntp_package: ntp
+    ntp_service: ntp
+  when: ansible_os_family == 'Debian'
 
-- name: Ensure that the ntp package is installed
+- name: Attempting to set os family specific facts (RedHat)
+  tags: ntp
+  set_fact:
+    ntp_envfile: /etc/sysconfig/ntpd
+    ntp_envname: options
+    ntp_package: ntp
+    ntp_service: ntpd
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure that the {{ ntp_package }} package is installed
   tags: ntp
   become: true
   package:
-    name: "{{ ntp_package_name }}"
+    name: "{{ ntp_package }}"
     state: present
 
 - name: Attempting to overlay ntp configurations
   tags: ntp
   become: true
   template:
-    src: "{{ item.template }}"
-    dest: "{{ item.path }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
   notify: restart ntpd
-  with_items: "{{ ntp_configs }}"
+  with_items:
+    - { src: ntp.conf.j2, dest: /etc/ntp.conf }
+    - { src: ntp.envfile.j2, dest: "{{ ntp_envfile }}" }
 
-- name: Ensure that ntpd is started and enabled on boot
+- name: Ensure that {{ ntp_service }} is started and enabled on boot
   tags: ntp
   become: true
   service:
     enabled: yes
-    name: "{{ ntp_service_name }}"
+    name: "{{ ntp_service }}"
     state: started
 ...
