@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+{% for k in ntp_keys|sort %}
+{%   if k.id is defined and k.type is defined and k.key is defined %}
+{{ k.id }}	{{ k.type }}	{{ k.key }}
+{%   endif %}
+{% endfor %}

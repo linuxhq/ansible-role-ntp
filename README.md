@@ -25,6 +25,7 @@ Available variables are listed below, along with default values:
         - ::1
       server: "{{ ntp_servers }}"
     ntp_envopts: '-g'
+    ntp_keys: []
     ntp_server_options: iburst
     ntp_servers:
       - "0.pool.ntp.org {{ ntp_server_options }}"

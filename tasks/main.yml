@@ -38,6 +38,20 @@
     - { src: ntp.conf.j2, dest: /etc/ntp.conf }
     - { src: ntp.envfile.j2, dest: "{{ ntp_envfile }}" }
 
+- name: Attempting to overlay ntp keys configurations, if applicable.
+  tags: ntp
+  become: true
+  template:
+    src: ntp.keys.j2
+    dest: "{{ ntp_commands.keys }}"
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart ntpd
+  when:
+    - ntp_commands.keys is defined
+    - ntp_keys|length > 0
+
 - name: Ensure that {{ ntp_service }} is started and enabled on boot
   tags: ntp
   become: true
